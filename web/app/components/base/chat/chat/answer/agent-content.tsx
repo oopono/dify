@@ -21,14 +21,16 @@ const AgentContent: FC<AgentContentProps> = ({
     agent_thoughts,
   } = item
 
+  const lastThoughts = agent_thoughts.slice(-1);
+  
   if (annotation?.logAnnotation)
     return <Markdown content={annotation?.logAnnotation.content || ''} />
 
   return (
     <div>
-      {agent_thoughts?.map((thought, index) => (
+      {lastThoughts?.map((thought, index) => (
         <div key={index} className='px-2 py-1'>
-          {thought.thought && (
+          {thought.thought && !thought.observation && (
             <Markdown content={thought.thought} />
           )}
           {/* {item.tool} */}
@@ -39,7 +41,6 @@ const AgentContent: FC<AgentContentProps> = ({
               isFinished={!!thought.observation || !responding}
             />
           )}
-
           {
             !!thought.message_files?.length && (
               <FileList
